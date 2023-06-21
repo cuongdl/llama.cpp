@@ -7,8 +7,26 @@
 #make
 
 //De build examples
-mkdir build
-cd build
-cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON
+mkdir build; cd build; cmake .. -DBUILD_TESTING=ON -DLLAMA_BUILD_EXAMPLES=ON; cmake --build .
 ccmake ..
-cmake --build .
+
+Download Model from: https://huggingface.co/vicuna/ggml-vicuna-7b-1.1/resolve/main/ggml-vic7b-q4_0.bin
+
+Test:
+!./main -m ./models/7B/vicuna-7b-1.1.ggmlv3.q2_K.bin \
+        -t 8 \
+        -n 128 \
+        -p 'The first man on the moon was '
+
+Train by custom data:
+!cd build; ./bin/train-text-from-scratch \
+        --vocab-model ../models/ggml-vocab.bin \
+        --ctx 64 --embd 256 --head 8 --layer 16 \
+        --checkpoint-in  chk-shakespeare-256x16.bin \
+        --checkpoint-out chk-shakespeare-256x16.bin \
+        --model-out ggml-shakespeare-256x16-f32.bin \
+        --train-data "shakespeare.txt" \
+        -t 6 -b 16 -n 32 --seed 1 --adam-iter 16 \
+        --print-details-interval 0 --predict 16 --use-flash
+
+FineTune Video guide: https://asciinema.org/a/592303
