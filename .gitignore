@@ -23,7 +23,7 @@ build-no-accel/
 build-sanitize-addr/
 build-sanitize-thread/
 
-*.bin
+/models/7B/*.bin
 
 /main
 /quantize
